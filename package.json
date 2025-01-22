@@ -9,6 +9,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
+    "beautify" : "lint-staged",
     "watch": "sass src/resources/scss/app.scss src/public/css/app.css -w",
     "start": "nodemon --inspect src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
