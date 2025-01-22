@@ -1,16 +1,22 @@
 {
   "dependencies": {
     "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "morgan": "^1.10.0",
     "nodemon": "^3.1.9"
   },
   "name": "blog",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start" : "nodemon --inspect index.js",
+    "watch": "sass src/resources/scss/app.scss src/public/css/app.css -w",
+    "start": "nodemon --inspect src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "sass": "^1.83.4"
+  }
 }
