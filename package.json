@@ -13,10 +13,19 @@
     "start": "nodemon --inspect src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "lint-staged": {
+    "src/**/*.{js,hbs,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "hooks": {
+    "pre-commit": "lint-staged"
+  },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.1",
+    "prettier": "^3.4.2",
     "sass": "^1.83.4"
   }
 }
