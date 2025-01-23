@@ -6,13 +6,18 @@ import path from 'path';
 import { engine as handlebars } from 'express-handlebars';
 import * as sass from 'sass';
 import route from './routes/index.js';
+import { connect } from './config/db/index.js';
+import methodOverride from 'method-override';
 
 const app = express();
 const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+connect();
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 // HTTP Logger
 // app.use(morgan('combined'))
@@ -22,10 +27,13 @@ app.engine(
     'hbs',
     handlebars({
         extname: '.hbs',
+        helpers: {
+            sum: (a, b) => a + b,
+        },
     }),
 );
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'resources/views'));
+app.set('views', path.join(__dirname, 'resources', 'views'));
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -36,5 +44,5 @@ const result = await sass.compileAsync(
 route(app);
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`App listening on port ${port}`);
 });

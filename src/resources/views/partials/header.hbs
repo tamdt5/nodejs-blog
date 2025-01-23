@@ -1,6 +1,6 @@
 <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
-    <div class='container-fluid'>
-        <a class='navbar-brand' href='#'>TamDT Blog</a>
+    <div class='container'>
+        <a class='navbar-brand' href='/'>TamDT Blog</a>
         <button
             class='navbar-toggler'
             type='button'
@@ -13,30 +13,43 @@
             <span class='navbar-toggler-icon'></span>
         </button>
         <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-            <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-                <li class='nav-item'>
+            <ul class='navbar-nav ms-auto'>
+                <li class='nav-item dropdown'>
                     <a
-                        class='nav-link active'
-                        aria-current='page'
+                        class='nav-link dropdown-toggle'
                         href='#'
-                    >Home</a>
-                </li>
-                <li class='nav-item'>
-                    <a class='nav-link' href='#'>Link</a>
+                        id='navbarDarkDropdownMenuLink'
+                        role='button'
+                        data-bs-toggle='dropdown'
+                        aria-expanded='false'
+                    >
+                        <img
+                            class='user-avatar'
+                            src='https://pbs.twimg.com/media/FBQ0h93WYAciBQ0.jpg:large'
+                            alt=''
+                        />
+                        Tâm Đặng
+                    </a>
+                    <ul
+                        class='dropdown-menu dropdown-menu-dark'
+                        aria-labelledby='navbarDarkDropdownMenuLink'
+                    >
+                        <li><a class='dropdown-item' href='/courses/create'>Đăng
+                                khoá học</a></li>
+                        <div class='dropdown-divider'></div>
+                        <li><a
+                                class='dropdown-item'
+                                href='/me/stored/courses'
+                            >Khoá học của tôi</a></li>
+                        <div class='dropdown-divider'></div>
+                        <li><a
+                                class='dropdown-item'
+                                href='/me/stored/courses'
+                            >Bài viết của tôi</a></li>
+                        <div class='dropdown-divider'></div>
+                    </ul>
                 </li>
             </ul>
-            <form class='d-flex'>
-                <input
-                    class='form-control me-2'
-                    type='search'
-                    placeholder='Search'
-                    aria-label='Search'
-                />
-                <button
-                    class='btn btn-outline-success'
-                    type='submit'
-                >Search</button>
-            </form>
         </div>
     </div>
 </nav>
