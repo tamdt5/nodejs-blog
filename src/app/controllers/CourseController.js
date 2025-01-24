@@ -26,10 +26,10 @@ class CourseController {
         const course = new Course(formData);
         course
             .save()
-            .then(() => {
-                res.redirect(`/courses/${course.slug}`);
-            })
-            .catch((error) => {});
+            .then(() => res.redirect(`/courses/${course.slug}`))
+            .catch((error) => {
+                console.log(123);
+            });
     }
 
     // [GET] /courses/:id/edit
@@ -47,6 +47,13 @@ class CourseController {
     update(req, res, next) {
         Course.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.redirect('/me/stored/courses'))
+            .catch(next);
+    }
+
+    // [DELETE] /courses/:id
+    destroy(req, res, next) {
+        Course.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('back'))
             .catch(next);
     }
 }
