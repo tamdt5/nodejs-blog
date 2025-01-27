@@ -79,9 +79,22 @@ class CourseController {
                 Course.delete({
                     _id: { $in: req.body.courseIdList.split(',') },
                 })
-                    .then(() => {
-                        res.redirect('back');
-                    })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+            case 'restoreAll':
+                Course.updateOne(
+                    { _id: { $in: req.body.courseIdList.split(',') } },
+                    { deleted: false },
+                )
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+            case 'forceAll':
+                Course.deleteOne({
+                    _id: { $in: req.body.courseIdList.split(',') },
+                })
+                    .then(() => res.redirect('back'))
                     .catch(next);
                 break;
             default:

@@ -1,10 +1,43 @@
-<div class='mt-4'>
+<form class='mt-4' method="POST" name="submitFormTrash" action="/courses/handle-form-actions">
+    <input class="form-check-input d-none" value="" name="courseIdList" id="courseIdList">
     <h3>Thùng rác</h3>
     <a href="/me/stored/courses">Khoá học của tôi</a>
+    <div class="mt-4 d-flex align-items-center">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+            <label class="form-check-label" for="checkbox-all">
+                Chọn tất cả 
+            </label>
+        </div>
+        <select name="action" class="form-control form-control-sm checkbox-select-all-options" aria-label="Default select example" required>
+            <option selected value=""> Hành động</option>
+            <option value="restoreAll">Khôi phục tất cả</option>
+            <option value="forceAll">Xoá vĩnh viễn tất cả</option>
+        </select>
+        <button class="btn btn-primary btn-sm disabled btn-check-all-submit" >Thực hiện</button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="warningModalForceAll" aria-hidden="true"  tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cảnh báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger">Xoá vĩnh viễn tất cả các khoá học này?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline-danger confirm-force-all">Xoá vĩnh viễn</button>
+            </div>
+            </div>
+        </div>
+    </div>
     <table class='table mt-4'>
         <thead>
             <tr>
-                <th scope='col'>#</th>
+                <th scope='col' class="text-center" colspan="2">#</th>
                 <th scope='col'>Tên khoá học</th>
                 <th scope='col'>Trình độ</th>
                 <th scope='col' colspan='3'>Thời gian tạo</th>
@@ -13,7 +46,10 @@
         <tbody>
             {{#each courses}}
                 <tr>
-                    <th scope='row'>{{sum @index 1}}</th>
+                    <th>
+                        <input class="form-check-input" type="checkbox" value="{{this._id}}" name='courseIds[]'>
+                    </th>
+                    <th>{{sum @index 1}}</th>
                     <td>{{this.name}}</td>
                     <td>{{this.level}}</td>
                     <td>{{this.createdAt}}</td>
@@ -57,7 +93,7 @@
       </div>
     </div>
   </div>
-</div>
+</form>
 
 {{!-- DELETE HIDDEN FORM --}}
 <form name="restore-course-form" method="POST"></form>
@@ -69,12 +105,15 @@
         var restoreForm = document.forms['restore-course-form'];
         var deleteForm = document.forms['delete-course-form'];
         var btnDeleteCourse = document.getElementById('btn-delete-course');
-
-        var exampleModal = document.getElementById('delete-course-modal')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget
-            courseId = button.getAttribute('data-id')
-        })
+        var checkBoxAll = $('#checkbox-all')
+        var checkAllSubmitBtn = $('.btn-check-all-submit')
+        var courseItemCheckbox = $('input[name="courseIds[]"]')
+        var checkBoxSelectAll = $('.checkbox-select-all-options')
+        var courseIdList = $("#courseIdList")
+        var submitFormTrashHTML = $('form[name="submitFormTrash"]')
+        var submitFormTrash = document.forms['submitFormTrash']
+        var confirmForceAll = $('.confirm-force-all')
+        var modalWarningForceAll = new bootstrap.Modal(document.getElementById("warningModalForceAll"), {});
 
         $(".restore-button").on('click',function(e){
             e.preventDefault()
@@ -86,6 +125,54 @@
         btnDeleteCourse.onclick = function() {
             deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE'
             deleteForm.submit()
+        }
+
+        //Checkbox all clicked
+        checkBoxAll.change(function() {
+            var isCheckedAll = $(this).prop('checked')
+            courseItemCheckbox.prop('checked', isCheckedAll)
+            renderCheckAllSubmitBtn()
+            formatVariableItems()
+        })
+
+        courseItemCheckbox.change(function(){
+            var isCheckAll = courseItemCheckbox.length === $('input[name="courseIds[]"]:checked').length
+            checkBoxAll.prop('checked', isCheckAll)
+            renderCheckAllSubmitBtn()
+            formatVariableItems()
+        })
+
+        submitFormTrashHTML.on('submit', function(e){
+            var isForceAll = checkBoxSelectAll.find(":selected").val() === 'forceAll';
+            if(isForceAll){
+                e.preventDefault()
+                modalWarningForceAll.show()
+            }
+        })
+
+        confirmForceAll.on('click',function() {
+            submitFormTrash.submit()
+        })
+
+        function renderCheckAllSubmitBtn() {
+            var checkedCount = $('input[name="courseIds[]"]:checked').length;
+            if(checkedCount > 0){
+                checkAllSubmitBtn.removeClass('disabled')
+            }else{
+                checkAllSubmitBtn.addClass('disabled')
+            }
+        }
+
+        function formatVariableItems(){
+            var checkedCount = $('input[name="courseIds[]"]:checked');
+            let result = [];
+            for (var i = 0; i < checkedCount.length; i++) {
+                if (checkedCount[i].checked) {
+                    result.push(checkedCount[i].value)
+                }
+            }
+
+            let test = courseIdList.attr('value',result)
         }
     })
 </script>

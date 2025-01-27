@@ -15,13 +15,22 @@
         </select>
         <button class="btn btn-primary btn-sm disabled btn-check-all-submit" >Thực hiện</button>
     </div>
+
     <table class='table mt-4'>
         <thead>
             <tr>
-                <th scope='col' colspan="2" class="text-end">#</th>
-                <th scope='col'>Tên khoá học</th>
-                <th scope='col'>Trình độ</th>
-                <th scope='col' colspan='2'>Thời gian tạo</th>
+                <th scope='col' colspan="2" class="text-center">#</th>
+                <th scope='col'>Tên khoá học
+                    {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>
+                    Trình độ
+                    {{{sortable 'level' _sort}}}
+                </th>
+                <th scope='col' colspan='2'>
+                    Thời gian tạo
+                    {{{sortable 'createdAt' _sort}}}
+                </th>
             </tr>
         </thead>
         <tbody>
