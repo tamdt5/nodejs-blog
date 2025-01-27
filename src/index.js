@@ -8,7 +8,8 @@ import * as sass from 'sass';
 import route from './routes/index.js';
 import { connect } from './config/db/index.js';
 import methodOverride from 'method-override';
-import SortMiddlewares from './app/middlewares/SortMiddlewares.js';
+import sortMiddlewares from './app/middlewares/SortMiddlewares.js';
+import handlebarHelpers from './helpers/handlebars.js';
 
 const app = express();
 const port = 3000;
@@ -24,35 +25,14 @@ app.use(methodOverride('_method'));
 // app.use(morgan('combined'))
 
 //Custom middleware
-app.use(SortMiddlewares);
+app.use(sortMiddlewares);
 
 // Template engine
 app.engine(
     'hbs',
     handlebars({
         extname: '.hbs',
-        helpers: {
-            sum: (a, b) => a + b,
-            sortable: (field, sort) => {
-                const sortType = field === sort.column ? sort.type : 'default';
-
-                const icons = {
-                    default: 'funnel-outline',
-                    desc: 'arrow-down-outline',
-                    asc: 'arrow-up-outline',
-                };
-
-                const type = {
-                    default: 'desc',
-                    desc: 'asc',
-                    asc: 'desc',
-                };
-
-                return `<a href="?_sort&column=${field}&type=${type[sortType]}">
-                        <ion-icon name="${icons[sortType]}"></ion-icon>
-                    </a>`;
-            },
-        },
+        helpers: handlebarHelpers,
     }),
 );
 app.set('view engine', 'hbs');
