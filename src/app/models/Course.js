@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
 const mongooseDelete = require('mongoose-delete');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const Schema = mongoose.Schema;
 
@@ -33,8 +34,17 @@ Course.query.sortable = function (req) {
 };
 
 // Add plugins
+
 mongoose.plugin(slug);
 Course.plugin(AutoIncrement);
+
+mongoosePaginate.paginate.options = {
+    lean: true,
+    limit: 2,
+    offset: 1,
+};
+
+Course.plugin(mongoosePaginate);
 Course.plugin(mongooseDelete, {
     overrideMethods: ['delete', 'countDocuments'],
     deletedAt: true,

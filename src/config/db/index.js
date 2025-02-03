@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export async function connect() {
     try {
-        await mongoose.connect('mongodb://localhost:32768/tamdt_blog_dev', {
+        await mongoose.connect('mongodb://localhost:32769/tamdt_blog_dev', {
             directConnection: true,
             useNewUrlParser: true,
             useUnifiedTopology: true,

@@ -1,18 +1,26 @@
 const Course = require('../models/Course');
-const { multipleMongooseToObject } = require('../../util/mongoose');
+const {
+    multipleMongooseToObject,
+    mongooseCountAllRecords,
+    reformatPagination,
+} = require('../../util/mongoose');
 class MeController {
     // [GET] /me/stored/courses
     storedCourses(req, res, next) {
         Promise.all([
             Course.countDocumentsDeleted(),
-            Course.find({}).sortable(req),
+            Course.find({})
+                .sortable(req)
+                .paginate({}, function (err, res) {}),
         ])
-            .then(([deletedCount, courses]) =>
+            .then(([deletedCount, courses]) => {
+                console.log(reformatPagination(courses));
                 res.render('me/stored-courses', {
-                    courses: multipleMongooseToObject(courses),
+                    courses: multipleMongooseToObject(courses.docs),
+                    pagination: reformatPagination(courses),
                     deletedCount,
-                }),
-            )
+                });
+            })
             .catch(next);
     }
 
